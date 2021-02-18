@@ -85,6 +85,32 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
+		let url = document.getElementById("endpoint").value;
+		console.log(url);
+		fetch(url) 
+			.then(
+				function(response) {
+					if (response.status !== 200) {
+						(function(error) {
+					document.getElementById("output").innerHTML = error.message;
+				})
+						//document.getElementById("output").innerHTML = response.message;
+					return;
+				}
+				else {
+      // Examine the text in the response
+				response.json().then(function(data) {
+					console.log(data);
+					let obj = JSON.stringify(data);
+					document.getElementById("output").innerHTML = obj;
+				});
+				}
+				}
+			)
+			.catch(function(error) {
+					document.getElementById("output").innerHTML = error.message;
+				})
+
       }
 
       // This function should fetch one entry from the given endpoint.
@@ -93,6 +119,33 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+		let id = window.prompt("Enter record id: ");
+		let url = document.getElementById("endpoint").value;
+		fetch(url + '/' + id)
+			.then(
+				function(response) {
+					if (response.status !== 200) {
+						document.getElementById("output").innerHTML = response.status + " " + response.statusText;
+					return;
+				}
+				else {
+      // Examine the text in the response
+				response.json().then(function(data) {
+					console.log(data);
+					let obj = JSON.stringify(data);
+					document.getElementById("output").innerHTML = obj;
+				});
+				}
+				}
+			)
+			.catch(function(error) {
+					document.getElementById("output").innerHTML = error.message;
+				})
+			if (response.status !== 200) {
+					document.getElementById("output").innerHTML = response.message;
+				
+		 }
+	
       }
 
       // This function should use fetch to create one entry in the given endpoint.
@@ -101,6 +154,42 @@
       // the writeup to view the URL pattern for create and update
       function createRecord() {
         // TODO
+		let author = window.prompt("Enter author: ");
+		let title = window.prompt("Enter title: ");
+		let url = document.getElementById("endpoint").value;
+		fetch(url, {
+			method: 'post',
+			headers: {
+				"Content-type": "application/json"
+			},
+			body: JSON.stringify({
+				'author': author, 
+				'title': title
+				}),
+		})
+		//.then(json)
+			.then(response =>  {
+				if (response.status !== 201) {
+						document.getElementById("output").innerHTML = response.status + " " + response.statusText;
+					return;
+				}
+				//document.getElementById("output").innerHTML = response.message;
+				response.json().then(json => {
+            // code that can access both here
+					let test = JSON.stringify({
+						'author': json.author,
+						'title': json.title,
+						'id': json.id
+					});
+					document.getElementById("output").innerHTML = test;
+				})
+			})
+			.catch(function(error) {
+				document.getElementById("output").innerHTML = error.message;
+})
+				
+
+		
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
@@ -109,6 +198,40 @@
       // the writeup to view the URL pattern for create and update
       function updateRecord() {
         // TODO
+		let author = window.prompt("Enter author: ");
+		let title = window.prompt("Enter title: ");
+		let id = window.prompt("Enter id: ");
+		let url = document.getElementById("endpoint").value;
+		fetch(url + '/' + id, {
+			method: "PUT",
+			body: JSON.stringify({
+				"title": title,
+				"author": author
+			}),
+			headers: {
+				"Content-Type": "application/json; charset=utf-8"
+			},
+			credentials: "same-origin"
+		})
+		.then(response =>  {
+				if (response.status !== 200) {
+					document.getElementById("output").innerHTML = response.status + " " + response.statusText;
+					return;
+				}
+				//document.getElementById("output").innerHTML = response.message;
+				response.json().then(json => {
+            // code that can access both here
+					let test = JSON.stringify({
+						'author': json.author,
+						'title': json.title,
+						'id': json.id
+					});
+					document.getElementById("output").innerHTML = test;
+				})
+			})
+			.catch(function(error) {
+				document.getElementById("output").innerHTML = error.message;
+			})
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -118,6 +241,34 @@
       // delete all, only delete one.
       function deleteRecord() {
         // TODO
+		let url = document.getElementById("endpoint").value;
+		let id = window.prompt("Enter id: ");
+		fetch(url + '/' + id, {
+  method: "DELETE",
+
+  headers: {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  credentials: "same-origin"
+}).then(response =>  {
+				if (response.status !== 200) {
+					document.getElementById("output").innerHTML = response.status + " " + response.statusText;
+					return;
+				}
+				//document.getElementById("output").innerHTML = response.message;
+				response.json().then(json => {
+            // code that can access both here
+					let test = JSON.stringify({
+						'author': json.author,
+						'title': json.title,
+						'id': json.id
+					});
+					document.getElementById("output").innerHTML = test;
+				})
+			})
+			.catch(function(error) {
+				document.getElementById("output").innerHTML = error.message;
+			})
       }
 
       window.addEventListener('DOMContentLoaded', () => {
